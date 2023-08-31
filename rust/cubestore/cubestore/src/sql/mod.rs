@@ -2797,7 +2797,6 @@ mod tests {
                          ) AS `lambda` where a = 1 group by 1, 2 order by 3 desc").await.unwrap();
             match &result.get_rows()[0].values()[0] {
                 TableValue::String(s) => {
-                    println!("!! s {}", s);
                     assert_eq!(s,
                                 "Sort\
                                 \n  Projection, [sel__a, sel__b, sel__c]\
@@ -2833,7 +2832,6 @@ mod tests {
                          ) AS `lambda` where a = 1 group by 1, 2 order by 3 desc").await.unwrap();
             match &result.get_rows()[0].values()[0] {
                 TableValue::String(s) => {
-                    println!("!! s {}", s);
                     assert_eq!(s,
                                 "Sort\
                                 \n  Projection, [sel__a, sel__b, sel__c]\
@@ -3984,6 +3982,7 @@ mod tests {
         Config::test("compaction").update_config(|mut config| {
             config.partition_split_threshold = 5;
             config.compaction_chunks_count_threshold = 0;
+            config.select_worker_pool_size = 1;
             config
         }).start_test(async move |services| {
             let service = services.sql_service;
